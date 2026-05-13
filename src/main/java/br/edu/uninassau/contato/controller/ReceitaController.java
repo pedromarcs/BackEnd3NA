@@ -3,28 +3,46 @@ package br.edu.uninassau.contato.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.*;
+import java.util.List;
 import br.edu.uninassau.contato.entity.Receita;
 import br.edu.uninassau.contato.repository.ReceitaRepository;
 
 @RestController
+@RequestMapping("/receita")
 public class ReceitaController {
 
     @Autowired
     private ReceitaRepository receitaRepository;
 
-    @PostMapping("/receita")
+    @PostMapping
     public ResponseEntity<String> criarReceita(@RequestBody Receita receita) {
         receitaRepository.save(receita);
         return ResponseEntity.status(201).body("Receita criada com sucesso!");
     }
 
-    @GetMapping("/receita")
+    @GetMapping
     public ResponseEntity<List<Receita>> getReceitas() {
         return ResponseEntity.ok(receitaRepository.findAll());
     }
 
-    @PutMapping("/receita/{id}")
+    @GetMapping("/{id}")
+    public ResponseEntity<Receita> getReceitaPorId(@PathVariable Long id) {
+        return receitaRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/nutricionista/{idNutri}")
+    public ResponseEntity<List<Receita>> getReceitasPorNutricionista(@PathVariable Long idNutri) {
+        return ResponseEntity.ok(receitaRepository.findByNutricionistaIdNutri(idNutri));
+    }
+
+    @GetMapping("/tags/{tag}")
+    public ResponseEntity<List<Receita>> getReceitasPorTag(@PathVariable String tag) {
+        return ResponseEntity.ok(receitaRepository.findByTagsContainingIgnoreCase(tag));
+    }
+
+    @PutMapping("/{id}")
     public ResponseEntity<String> putReceita(@PathVariable Long id, @RequestBody Receita dados) {
         return receitaRepository.findById(id).map(r -> {
             r.setTitulo(dados.getTitulo());
@@ -43,7 +61,7 @@ public class ReceitaController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/receita/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReceita(@PathVariable Long id) {
         if (receitaRepository.existsById(id)) {
             receitaRepository.deleteById(id);

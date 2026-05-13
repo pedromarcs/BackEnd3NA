@@ -1,6 +1,8 @@
 package br.edu.uninassau.contato.entity;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "nutricionista")
@@ -8,46 +10,61 @@ public class Nutricionista {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_nutri")
+    private Long idNutri;
 
-    @Column(nullable = false)
-    private String nome;
+    @Column(name = "nome_completo", nullable = false, length = 150)
+    private String nomeCompleto;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Column(name = "email_profissional", nullable = false, unique = true, length = 150)
+    private String emailProfissional;
 
-    @Column(nullable = false)
+    @Column(name = "senha_hash", nullable = false, length = 255)
     private String senhaHash;
 
-    @Column(unique = true)
+    @Column(name = "crn", unique = true, length = 20)
     private String crn;
 
+    @Column(name = "uf", length = 2)
     private String uf;
-    private String especialidade;
+
+    @Column(name = "especialidade_principal", length = 100)
+    private String especialidadePrincipal;
+
+    @Column(name = "biografia", columnDefinition = "TEXT")
     private String biografia;
-    private Double avaliacaoMedia = 0.0;
+
+    @Column(name = "avaliacao_media", precision = 4, scale = 2)
+    private BigDecimal avaliacaoMedia = BigDecimal.ZERO;
+
+    @Column(name = "total_pacientes")
     private Integer totalPacientes = 0;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     public Nutricionista() {}
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public Long getIdNutri() { return idNutri; }
+    public void setIdNutri(Long idNutri) { this.idNutri = idNutri; }
+    public String getNomeCompleto() { return nomeCompleto; }
+    public void setNomeCompleto(String nomeCompleto) { this.nomeCompleto = nomeCompleto; }
+    public String getEmailProfissional() { return emailProfissional; }
+    public void setEmailProfissional(String emailProfissional) { this.emailProfissional = emailProfissional; }
     public String getSenhaHash() { return senhaHash; }
     public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
     public String getCrn() { return crn; }
     public void setCrn(String crn) { this.crn = crn; }
     public String getUf() { return uf; }
     public void setUf(String uf) { this.uf = uf; }
-    public String getEspecialidade() { return especialidade; }
-    public void setEspecialidade(String especialidade) { this.especialidade = especialidade; }
+    public String getEspecialidadePrincipal() { return especialidadePrincipal; }
+    public void setEspecialidadePrincipal(String especialidadePrincipal) { this.especialidadePrincipal = especialidadePrincipal; }
     public String getBiografia() { return biografia; }
     public void setBiografia(String biografia) { this.biografia = biografia; }
-    public Double getAvaliacaoMedia() { return avaliacaoMedia; }
-    public void setAvaliacaoMedia(Double avaliacaoMedia) { this.avaliacaoMedia = avaliacaoMedia; }
+    public BigDecimal getAvaliacaoMedia() { return avaliacaoMedia; }
+    public void setAvaliacaoMedia(BigDecimal avaliacaoMedia) { this.avaliacaoMedia = avaliacaoMedia; }
     public Integer getTotalPacientes() { return totalPacientes; }
     public void setTotalPacientes(Integer totalPacientes) { this.totalPacientes = totalPacientes; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
