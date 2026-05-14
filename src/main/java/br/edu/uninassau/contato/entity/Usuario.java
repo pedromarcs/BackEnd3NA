@@ -1,9 +1,14 @@
 package br.edu.uninassau.contato.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "usuario")
@@ -14,12 +19,17 @@ public class Usuario {
     @Column(name = "id_user")
     private Long idUser;
 
+    @NotBlank(message = "Nome é obrigatório")
     @Column(name = "nome_completo", nullable = false, length = 150)
     private String nomeCompleto;
 
+    @NotBlank(message = "Email é obrigatório")
+    @Email(message = "Email inválido")
     @Column(name = "email", nullable = false, unique = true, length = 150)
     private String email;
 
+    @NotBlank(message = "Senha é obrigatória")
+    @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres")
     @Column(name = "senha_hash", nullable = false, length = 255)
     private String senhaHash;
 
@@ -59,8 +69,22 @@ public class Usuario {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    // ===== RELACIONAMENTOS =====
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Evolucao> evolucoes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VinculoNutriPaciente> vinculos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SolicitacoesDeContratacao> solicitacoes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PlanoAlimentar> planos = new ArrayList<>();
+
     public Usuario() {}
 
+    // ===== GETTERS E SETTERS BÁSICOS =====
     public Long getIdUser() { return idUser; }
     public void setIdUser(Long idUser) { this.idUser = idUser; }
     public String getNomeCompleto() { return nomeCompleto; }
@@ -93,4 +117,14 @@ public class Usuario {
     public void setStatus(String status) { this.status = status; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    // ===== GETTERS E SETTERS RELACIONAMENTOS =====
+    public List<Evolucao> getEvolucoes() { return evolucoes; }
+    public void setEvolucoes(List<Evolucao> evolucoes) { this.evolucoes = evolucoes; }
+    public List<VinculoNutriPaciente> getVinculos() { return vinculos; }
+    public void setVinculos(List<VinculoNutriPaciente> vinculos) { this.vinculos = vinculos; }
+    public List<SolicitacoesDeContratacao> getSolicitacoes() { return solicitacoes; }
+    public void setSolicitacoes(List<SolicitacoesDeContratacao> solicitacoes) { this.solicitacoes = solicitacoes; }
+    public List<PlanoAlimentar> getPlanos() { return planos; }
+    public void setPlanos(List<PlanoAlimentar> planos) { this.planos = planos; }
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import br.edu.uninassau.contato.entity.Usuario;
 import br.edu.uninassau.contato.repository.UsuarioRepository;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuario")
@@ -15,9 +16,21 @@ public class UsuarioController {
     private UsuarioRepository usuarioRepository;
 
     @PostMapping
-    public ResponseEntity<String> criarUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<String> criarUsuario(@Valid @RequestBody Usuario usuario) {
         usuarioRepository.save(usuario);
         return ResponseEntity.status(201).body("Usuário criado com sucesso!");
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Usuario dados) {
+        return usuarioRepository.findByEmail(dados.getEmail())
+            .map(u -> {
+                if (u.getSenhaHash().equals(dados.getSenhaHash())) {
+                    return ResponseEntity.ok(u);
+                }
+                return ResponseEntity.status(401).body("Senha incorreta!");
+            })
+            .orElse(ResponseEntity.status(404).body("Usuário não encontrado!"));
     }
 
     @GetMapping
