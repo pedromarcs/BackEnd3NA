@@ -1,22 +1,23 @@
 package br.edu.uninassau.contato.entity;
-
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "plano_receita")
 public class PlanoReceita {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_plano_receita")
     private Long idPlanoReceita;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_id_plano", nullable = false)
     private PlanoAlimentar plano;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_id_receita", nullable = false)
     private Receita receita;

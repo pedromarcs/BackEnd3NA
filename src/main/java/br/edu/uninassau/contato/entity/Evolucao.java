@@ -1,4 +1,6 @@
 package br.edu.uninassau.contato.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -7,11 +9,13 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "evolucao")
 public class Evolucao {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_evolucao")
     private Long idEvolucao;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_id_user", nullable = false)
     private Usuario usuario;

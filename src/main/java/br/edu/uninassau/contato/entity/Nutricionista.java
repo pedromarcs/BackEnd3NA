@@ -1,4 +1,6 @@
 package br.edu.uninassau.contato.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -34,15 +36,19 @@ public class Nutricionista {
     private LocalDateTime createdAt;
 
     // ===== RELACIONAMENTOS =====
+    @JsonIgnore
     @OneToMany(mappedBy = "nutricionista", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Receita> receitas = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "nutricionista", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlanoAlimentar> planos = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "nutricionista", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VinculoNutriPaciente> vinculos = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "nutricionista", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SolicitacoesDeContratacao> solicitacoes = new ArrayList<>();
 
@@ -75,13 +81,10 @@ public class Nutricionista {
     // ===== GETTERS E SETTERS RELACIONAMENTOS =====
     public List<Receita> getReceitas() { return receitas; }
     public void setReceitas(List<Receita> receitas) { this.receitas = receitas; }
-
     public List<PlanoAlimentar> getPlanos() { return planos; }
     public void setPlanos(List<PlanoAlimentar> planos) { this.planos = planos; }
-
     public List<VinculoNutriPaciente> getVinculos() { return vinculos; }
     public void setVinculos(List<VinculoNutriPaciente> vinculos) { this.vinculos = vinculos; }
-
     public List<SolicitacoesDeContratacao> getSolicitacoes() { return solicitacoes; }
     public void setSolicitacoes(List<SolicitacoesDeContratacao> solicitacoes) { this.solicitacoes = solicitacoes; }
 }

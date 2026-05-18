@@ -1,4 +1,6 @@
 package br.edu.uninassau.contato.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -6,15 +8,18 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "vinculo_nutri_paciente")
 public class VinculoNutriPaciente {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_vinculo")
     private Long idVinculo;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_id_user", nullable = false)
     private Usuario usuario;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_id_nutri", nullable = false)
     private Nutricionista nutricionista;

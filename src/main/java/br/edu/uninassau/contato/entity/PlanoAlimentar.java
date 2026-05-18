@@ -1,5 +1,6 @@
 package br.edu.uninassau.contato.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,10 +16,12 @@ public class PlanoAlimentar {
     @Column(name = "id_plano")
     private Long idPlano;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_id_user", nullable = false)
     private Usuario usuario;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_id_nutri_criador", nullable = false)
     private Nutricionista nutricionista;
@@ -41,6 +44,7 @@ public class PlanoAlimentar {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "plano", cascade = CascadeType.ALL)
     private Set<PlanoReceita> planoReceitas = new HashSet<>();
 

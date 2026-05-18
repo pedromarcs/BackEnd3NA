@@ -1,5 +1,6 @@
 package br.edu.uninassau.contato.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -70,15 +71,19 @@ public class Usuario {
     private LocalDateTime createdAt;
 
     // ===== RELACIONAMENTOS =====
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Evolucao> evolucoes = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VinculoNutriPaciente> vinculos = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SolicitacoesDeContratacao> solicitacoes = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlanoAlimentar> planos = new ArrayList<>();
 
