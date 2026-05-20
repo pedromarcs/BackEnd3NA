@@ -1,45 +1,31 @@
 package br.edu.uninassau.contato.entity;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "evolucao")
 public class Evolucao {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_evolucao")
     private Long idEvolucao;
-
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_id_user", nullable = false)
     private Usuario usuario;
-
     @Column(name = "data_registro")
     private LocalDate dataRegistro;
-
     @Column(name = "peso_registrado", precision = 5, scale = 2)
     private BigDecimal pesoRegistrado;
-
     @Column(name = "meta_progresso", precision = 5, scale = 2)
     private BigDecimal metaProgresso;
-
     @Column(name = "total_calorias_consumidas", precision = 8, scale = 2)
     private BigDecimal totalCaloriasConsumidas;
-
     @Column(name = "refeicoes_concluidas")
     private Integer refeicoesConcluidasI = 0;
-
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
     public Evolucao() {}
-
     public Long getIdEvolucao() { return idEvolucao; }
     public void setIdEvolucao(Long idEvolucao) { this.idEvolucao = idEvolucao; }
     public Usuario getUsuario() { return usuario; }
