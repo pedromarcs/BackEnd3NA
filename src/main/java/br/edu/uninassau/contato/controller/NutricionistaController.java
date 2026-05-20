@@ -20,6 +20,18 @@ public class NutricionistaController {
         return ResponseEntity.status(201).body("Nutricionista criado com sucesso!");
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Nutricionista dados) {
+        return nutricionistaRepository.findByEmailProfissional(dados.getEmailProfissional())
+            .map(n -> {
+                if (n.getSenhaHash().equals(dados.getSenhaHash())) {
+                    return ResponseEntity.ok(n);
+                }
+                return ResponseEntity.status(401).body("Senha incorreta!");
+            })
+            .orElse(ResponseEntity.status(404).body("Nutricionista não encontrado!"));
+    }
+
     @GetMapping
     public ResponseEntity<List<Nutricionista>> getNutricionistas() {
         return ResponseEntity.ok(nutricionistaRepository.findAll());
