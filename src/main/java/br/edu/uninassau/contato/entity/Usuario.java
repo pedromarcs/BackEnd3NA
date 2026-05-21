@@ -64,6 +64,10 @@ public class Usuario {
     @Column(name = "rotina_atividade", length = 100)
     private String rotinaAtividade;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "genero", nullable = true, length = 50)
+    private Genero genero;
+
     @Column(name = "status", length = 20)
     private String status = "Ativo";
 
@@ -91,43 +95,64 @@ public class Usuario {
 
     public Long getIdUser() { return idUser; }
     public void setIdUser(Long idUser) { this.idUser = idUser; }
+    
     public String getNomeCompleto() { return nomeCompleto; }
     public void setNomeCompleto(String nomeCompleto) { this.nomeCompleto = nomeCompleto; }
+    
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+    
     public String getSenhaHash() { return senhaHash; }
     public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
+    
     public LocalDate getDataNascimento() { return dataNascimento; }
     public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
+    
     public BigDecimal getPesoInicial() { return pesoInicial; }
     public void setPesoInicial(BigDecimal pesoInicial) { this.pesoInicial = pesoInicial; }
+    
     public BigDecimal getPesoAtual() { return pesoAtual; }
     public void setPesoAtual(BigDecimal pesoAtual) { this.pesoAtual = pesoAtual; }
+    
     public BigDecimal getPesoMeta() { return pesoMeta; }
     public void setPesoMeta(BigDecimal pesoMeta) { this.pesoMeta = pesoMeta; }
+    
     public BigDecimal getAltura() { return altura; }
     public void setAltura(BigDecimal altura) { this.altura = altura; }
+    
     public String getObjetivoSaude() { return objetivoSaude; }
     public void setObjetivoSaude(String objetivoSaude) { this.objetivoSaude = objetivoSaude; }
+    
     public String getTipoDieta() { return tipoDieta; }
     public void setTipoDieta(String tipoDieta) { this.tipoDieta = tipoDieta; }
+    
     public String getRestricoesReligiosas() { return restricoesReligiosas; }
     public void setRestricoesReligiosas(String restricoesReligiosas) { this.restricoesReligiosas = restricoesReligiosas; }
+    
     public String getAlergias() { return alergias; }
     public void setAlergias(String alergias) { this.alergias = alergias; }
+    
     public String getRotinaAtividade() { return rotinaAtividade; }
     public void setRotinaAtividade(String rotinaAtividade) { this.rotinaAtividade = rotinaAtividade; }
+
+    public Genero getGenero() { return genero; }
+    public void setGenero(Genero genero) { this.genero = genero; }
+    
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+    
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     public List<Evolucao> getEvolucoes() { return evolucoes; }
     public void setEvolucoes(List<Evolucao> evolucoes) { this.evolucoes = evolucoes; }
+    
     public List<VinculoNutriPaciente> getVinculos() { return vinculos; }
     public void setVinculos(List<VinculoNutriPaciente> vinculos) { this.vinculos = vinculos; }
+    
     public List<SolicitacoesDeContratacao> getSolicitacoes() { return solicitacoes; }
     public void setSolicitacoes(List<SolicitacoesDeContratacao> solicitacoes) { this.solicitacoes = solicitacoes; }
+    
     public List<PlanoAlimentar> getPlanos() { return planos; }
     public void setPlanos(List<PlanoAlimentar> planos) { this.planos = planos; }
 }
