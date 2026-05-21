@@ -5,7 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import br.edu.uninassau.contato.entity.SolicitacoesDeContratacao;
+import br.edu.uninassau.contato.entity.Usuario;
+import br.edu.uninassau.contato.dto.SolicitacoesDeContratacaoRequestDTO;
+import br.edu.uninassau.contato.entity.Nutricionista;
 import br.edu.uninassau.contato.repository.SolicitacoesDeContratacaoRepository;
+import br.edu.uninassau.contato.repository.UsuarioRepository;
+import br.edu.uninassau.contato.repository.NutricionistaRepository;
 
 @RestController
 @RequestMapping("/solicitacao")
@@ -14,10 +19,28 @@ public class SolicitacoesDeContratacaoController {
     @Autowired
     private SolicitacoesDeContratacaoRepository solicitacaoRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private NutricionistaRepository nutricionistaRepository;
+
     @PostMapping
-    public ResponseEntity<String> criarSolicitacao(@RequestBody SolicitacoesDeContratacao solicitacao) {
-        solicitacaoRepository.save(solicitacao);
-        return ResponseEntity.status(201).body("Solicitação criada com sucesso!");
+    public ResponseEntity<?> criarSolicitacao(@RequestBody SolicitacoesDeContratacaoRequestDTO dto) {
+        Usuario usuario = usuarioRepository.findById(dto.getUsuarioId()).orElse(null);
+        if (usuario == null) return ResponseEntity.status(404).body("Usuário não encontrado.");
+
+        Nutricionista nutricionista = nutricionistaRepository.findById(dto.getNutricionistaId()).orElse(null);
+        if (nutricionista == null) return ResponseEntity.status(404).body("Nutricionista não encontrado.");
+
+        SolicitacoesDeContratacao solicitacao = new SolicitacoesDeContratacao();
+        solicitacao.setUsuario(usuario);
+        solicitacao.setNutricionista(nutricionista);
+        solicitacao.setDataSolicitacao(dto.getDataSolicitacao());
+        solicitacao.setStatus(dto.getStatus() != null ? dto.getStatus() : "Pendente");
+
+        SolicitacoesDeContratacao salva = solicitacaoRepository.save(solicitacao);
+        return ResponseEntity.status(201).body(salva);
     }
 
     @GetMapping
