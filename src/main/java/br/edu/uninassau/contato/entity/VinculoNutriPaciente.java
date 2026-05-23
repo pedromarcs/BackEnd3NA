@@ -25,7 +25,7 @@ public class VinculoNutriPaciente {
     private Nutricionista nutricionista;
 
     @Column(name = "fk_id_solicitacao")
-    private Long fkIdSolicitacao;
+    private LocalDate fkIdSolicitacao;
 
     @Column(name = "data_solicitacao")
     private LocalDate dataSolicitacao;
@@ -48,7 +48,7 @@ public class VinculoNutriPaciente {
     public Nutricionista getNutricionista() { return nutricionista; }
     public void setNutricionista(Nutricionista nutricionista) { this.nutricionista = nutricionista; }
     public Long getFkIdSolicitacao() { return fkIdSolicitacao; }
-    public void setFkIdSolicitacao(Long fkIdSolicitacao) { this.fkIdSolicitacao = fkIdSolicitacao; }
+    public void setFkIdSolicitacao(LocalDate localDate) { this.fkIdSolicitacao = localDate; }
     public LocalDate getDataSolicitacao() { return dataSolicitacao; }
     public void setDataSolicitacao(LocalDate dataSolicitacao) { this.dataSolicitacao = dataSolicitacao; }
     public LocalDate getDataAprovacao() { return dataAprovacao; }
