@@ -1,18 +1,33 @@
 package br.edu.uninassau.contato.entity;
 
-public enum Genero {
-    MASCULINO("Masculino"),
-    FEMININO("Feminino"),
-    OUTRO("Outro"),
-    NAO_INFORMADO("Não informado");
+public enum Genero { 
 
-    private final String descricao;
+    MASCULINO("Masculino"), 
 
-    Genero(String descricao) {
-        this.descricao = descricao;
-    }
+    FEMININO("Feminino"), 
 
-    public String getDescricao() {
-        return descricao;
-    }
+    OUTRO("Outro"), 
+
+    NAO_INFORMADO("Não informado"); 
+
+  
+
+    private final String descricao; 
+
+  
+
+    Genero(String descricao) { 
+
+        this.descricao = descricao; 
+
+    } 
+
+  
+
+    public String getDescricao() { 
+
+        return descricao; 
+
+    } 
+
 }

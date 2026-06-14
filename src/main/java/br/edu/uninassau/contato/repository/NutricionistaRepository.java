@@ -5,5 +5,7 @@ import br.edu.uninassau.contato.entity.Nutricionista;
 import java.util.Optional;
 
 public interface NutricionistaRepository extends JpaRepository<Nutricionista, Long> {
+
     Optional<Nutricionista> findByEmailProfissional(String emailProfissional);
+
 }

@@ -34,7 +34,6 @@ public class VinculoNutriPacienteController {
         if (nutricionista == null) return ResponseEntity.status(404).body("Nutricionista não encontrado.");
 
         VinculoNutriPaciente vinculo = new VinculoNutriPaciente();
-        vinculo.setFkIdSolicitacao(dto.getFkIdSolicitacao());
         vinculo.setUsuario(usuario);
         vinculo.setNutricionista(nutricionista);
         vinculo.setDataSolicitacao(dto.getDataSolicitacao());
