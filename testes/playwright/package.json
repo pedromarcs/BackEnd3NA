@@ -1,0 +1,11 @@
+{
+  "name": "testes-nutri",
+  "version": "1.0.0",
+  "description": "Testes do cadastro de usuário do Nutri+ (API) com Playwright",
+  "scripts": {
+    "test": "playwright test --reporter=list"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.0"
+  }
+}
