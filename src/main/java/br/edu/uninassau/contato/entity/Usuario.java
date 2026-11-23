@@ -1,295 +1,209 @@
-package br.edu.uninassau.contato.entity;
+package com.example.backend3nareplica.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore; 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import jakarta.persistence.*; 
+@Entity
+@Table(name = "usuario")
+public class Usuario {
 
-import jakarta.validation.constraints.Email; 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_user")
+    private Long idUser;
 
-import jakarta.validation.constraints.NotBlank; 
+    @NotBlank(message = "Nome é obrigatório")
+    @Column(name = "nome_completo", nullable = false, length = 150)
+    private String nomeCompleto;
 
-import jakarta.validation.constraints.Size; 
+    @NotBlank(message = "Email é obrigatório")
+    @Email(message = "Email inválido")
+    @Column(name = "email", nullable = false, unique = true, length = 150)
+    private String email;
 
-import java.math.BigDecimal; 
+    @NotBlank(message = "Senha é obrigatória")
+    @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres")
+    @Column(name = "senha_hash", nullable = false, length = 255)
+    private String senhaHash;
 
-import java.time.LocalDate; 
+    @Column(name = "data_nascimento")
+    private LocalDate dataNascimento;
 
-import java.time.LocalDateTime; 
+    @Column(name = "peso_inicial", precision = 5, scale = 2)
+    private BigDecimal pesoInicial;
 
-import java.util.ArrayList; 
+    @Column(name = "peso_atual", precision = 5, scale = 2)
+    private BigDecimal pesoAtual;
 
-import java.util.List; 
+    @Column(name = "peso_meta", precision = 5, scale = 2)
+    private BigDecimal pesoMeta;
 
-  
+    @Column(name = "altura", precision = 4, scale = 2)
+    private BigDecimal altura;
 
-@Entity 
+    @Column(name = "objetivo_saude", length = 100)
+    private String objetivoSaude;
 
-@Table(name = "usuario") 
+    @Column(name = "tipo_dieta", length = 100)
+    private String tipoDieta;
 
-public class Usuario { 
+    @Column(name = "restricoes_religiosas", length = 100)
+    private String restricoesReligiosas;
 
-  
+    @Column(name = "alergias", columnDefinition = "TEXT")
+    private String alergias;
 
-    @Id 
+    @Column(name = "rotina_atividade", length = 100)
+    private String rotinaAtividade;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "genero", nullable = true, length = 50)
+    private Genero genero;
 
-    @Column(name = "id_user") 
+    @Column(name = "calorias_diarias")
+    private Integer caloriasDiarias;
 
-    private Long idUser; 
+    @Column(name = "status", length = 20)
+    private String status = "Ativo";
 
-  
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    @NotBlank(message = "Nome é obrigatório") 
+    @Column(name = "foto_url")
+    private String fotoUrl;
 
-    @Column(name = "nome_completo", nullable = false, length = 150) 
+    // ===== Consumo diário (NOT NULL com default 0 no banco) =====
 
-    private String nomeCompleto; 
+    @Column(name = "calorias_consumidas", nullable = false,
+            columnDefinition = "numeric(10,2) default 0")
+    private BigDecimal caloriasConsumidas = BigDecimal.ZERO;
 
-  
+    @Column(name = "proteinas_consumidas", nullable = false,
+            columnDefinition = "numeric(10,2) default 0")
+    private BigDecimal proteinasConsumidas = BigDecimal.ZERO;
 
-    @NotBlank(message = "Email é obrigatório") 
+    @Column(name = "carbos_consumidos", nullable = false,
+            columnDefinition = "numeric(10,2) default 0")
+    private BigDecimal carbosConsumidos = BigDecimal.ZERO;
 
-    @Email(message = "Email inválido") 
+    @Column(name = "gorduras_consumidas", nullable = false,
+            columnDefinition = "numeric(10,2) default 0")
+    private BigDecimal gordurasConsumidas = BigDecimal.ZERO;
 
-    @Column(name = "email", nullable = false, unique = true, length = 150) 
+    @Column(name = "data_consumo")
+    private LocalDate dataConsumo;
 
-    private String email; 
+    // ===== Relacionamentos =====
 
-  
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Evolucao> evolucoes = new ArrayList<>();
 
-    @NotBlank(message = "Senha é obrigatória") 
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VinculoNutriPaciente> vinculos = new ArrayList<>();
 
-    @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres") 
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SolicitacoesDeContratacao> solicitacoes = new ArrayList<>();
 
-    @Column(name = "senha_hash", nullable = false, length = 255) 
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PlanoAlimentar> planos = new ArrayList<>();
 
-    private String senhaHash; 
+    public Usuario() {}
 
-  
+    // ===== Getters e Setters =====
 
-    @Column(name = "data_nascimento") 
+    public Long getIdUser() { return idUser; }
+    public void setIdUser(Long idUser) { this.idUser = idUser; }
 
-    private LocalDate dataNascimento; 
+    public String getNomeCompleto() { return nomeCompleto; }
+    public void setNomeCompleto(String nomeCompleto) { this.nomeCompleto = nomeCompleto; }
 
-  
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    @Column(name = "peso_inicial", precision = 5, scale = 2) 
+    public String getSenhaHash() { return senhaHash; }
+    public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
 
-    private BigDecimal pesoInicial; 
+    public LocalDate getDataNascimento() { return dataNascimento; }
+    public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
 
-  
+    public BigDecimal getPesoInicial() { return pesoInicial; }
+    public void setPesoInicial(BigDecimal pesoInicial) { this.pesoInicial = pesoInicial; }
 
-    @Column(name = "peso_atual", precision = 5, scale = 2) 
+    public BigDecimal getPesoAtual() { return pesoAtual; }
+    public void setPesoAtual(BigDecimal pesoAtual) { this.pesoAtual = pesoAtual; }
 
-    private BigDecimal pesoAtual; 
+    public BigDecimal getPesoMeta() { return pesoMeta; }
+    public void setPesoMeta(BigDecimal pesoMeta) { this.pesoMeta = pesoMeta; }
 
-  
+    public BigDecimal getAltura() { return altura; }
+    public void setAltura(BigDecimal altura) { this.altura = altura; }
 
-    @Column(name = "peso_meta", precision = 5, scale = 2) 
+    public String getObjetivoSaude() { return objetivoSaude; }
+    public void setObjetivoSaude(String objetivoSaude) { this.objetivoSaude = objetivoSaude; }
 
-    private BigDecimal pesoMeta; 
+    public String getTipoDieta() { return tipoDieta; }
+    public void setTipoDieta(String tipoDieta) { this.tipoDieta = tipoDieta; }
 
-  
+    public String getRestricoesReligiosas() { return restricoesReligiosas; }
+    public void setRestricoesReligiosas(String restricoesReligiosas) { this.restricoesReligiosas = restricoesReligiosas; }
 
-    @Column(name = "altura", precision = 4, scale = 2) 
+    public String getAlergias() { return alergias; }
+    public void setAlergias(String alergias) { this.alergias = alergias; }
 
-    private BigDecimal altura; 
+    public String getRotinaAtividade() { return rotinaAtividade; }
+    public void setRotinaAtividade(String rotinaAtividade) { this.rotinaAtividade = rotinaAtividade; }
 
-  
+    public Genero getGenero() { return genero; }
+    public void setGenero(Genero genero) { this.genero = genero; }
 
-    @Column(name = "objetivo_saude", length = 100) 
+    public Integer getCaloriasDiarias() { return caloriasDiarias; }
+    public void setCaloriasDiarias(Integer caloriasDiarias) { this.caloriasDiarias = caloriasDiarias; }
 
-    private String objetivoSaude; 
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-  
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    @Column(name = "tipo_dieta", length = 100) 
+    public String getFotoUrl() { return fotoUrl; }
+    public void setFotoUrl(String fotoUrl) { this.fotoUrl = fotoUrl; }
 
-    private String tipoDieta; 
+    public BigDecimal getCaloriasConsumidas() { return caloriasConsumidas; }
+    public void setCaloriasConsumidas(BigDecimal caloriasConsumidas) { this.caloriasConsumidas = caloriasConsumidas; }
 
-  
+    public BigDecimal getProteinasConsumidas() { return proteinasConsumidas; }
+    public void setProteinasConsumidas(BigDecimal proteinasConsumidas) { this.proteinasConsumidas = proteinasConsumidas; }
 
-    @Column(name = "restricoes_religiosas", length = 100) 
+    public BigDecimal getCarbosConsumidos() { return carbosConsumidos; }
+    public void setCarbosConsumidos(BigDecimal carbosConsumidos) { this.carbosConsumidos = carbosConsumidos; }
 
-    private String restricoesReligiosas; 
+    public BigDecimal getGordurasConsumidas() { return gordurasConsumidas; }
+    public void setGordurasConsumidas(BigDecimal gordurasConsumidas) { this.gordurasConsumidas = gordurasConsumidas; }
 
-  
+    public LocalDate getDataConsumo() { return dataConsumo; }
+    public void setDataConsumo(LocalDate dataConsumo) { this.dataConsumo = dataConsumo; }
 
-    @Column(name = "alergias", columnDefinition = "TEXT") 
+    public List<Evolucao> getEvolucoes() { return evolucoes; }
+    public void setEvolucoes(List<Evolucao> evolucoes) { this.evolucoes = evolucoes; }
 
-    private String alergias; 
+    public List<VinculoNutriPaciente> getVinculos() { return vinculos; }
+    public void setVinculos(List<VinculoNutriPaciente> vinculos) { this.vinculos = vinculos; }
 
-  
+    public List<SolicitacoesDeContratacao> getSolicitacoes() { return solicitacoes; }
+    public void setSolicitacoes(List<SolicitacoesDeContratacao> solicitacoes) { this.solicitacoes = solicitacoes; }
 
-    @Column(name = "rotina_atividade", length = 100) 
-
-    private String rotinaAtividade; 
-
-  
-
-    @Enumerated(EnumType.STRING) 
-
-    @Column(name = "genero", nullable = true, length = 50) 
-
-    private Genero genero; 
-
-  
-
-    @Column(name = "calorias_diarias") 
-
-    private Integer caloriasDiarias; 
-
-  
-
-    public Integer getCaloriasDiarias() { return caloriasDiarias; } 
-
-    public void setCaloriasDiarias(Integer caloriasDiarias) { this.caloriasDiarias = caloriasDiarias; } 
-
-  
-
-    @Column(name = "status", length = 20) 
-
-    private String status = "Ativo"; 
-
-  
-
-    @Column(name = "created_at") 
-
-    private LocalDateTime createdAt; 
-
-  
-
-    @Column(name = "foto_url") 
-
-    private String fotoUrl; 
-
-  
-
-    public String getFotoUrl() { return fotoUrl; } 
-
-    public void setFotoUrl(String fotoUrl) { this.fotoUrl = fotoUrl; } 
-
-  
-
-    @JsonIgnore 
-
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true) 
-
-    private List<Evolucao> evolucoes = new ArrayList<>(); 
-
-  
-
-    @JsonIgnore 
-
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true) 
-
-    private List<VinculoNutriPaciente> vinculos = new ArrayList<>(); 
-
-  
-
-    @JsonIgnore 
-
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true) 
-
-    private List<SolicitacoesDeContratacao> solicitacoes = new ArrayList<>(); 
-
-  
-
-    @JsonIgnore 
-
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true) 
-
-    private List<PlanoAlimentar> planos = new ArrayList<>(); 
-
-  
-
-    public Usuario() {} 
-
-  
-
-    public Long getIdUser() { return idUser; } 
-
-    public void setIdUser(Long idUser) { this.idUser = idUser; } 
-
-    public String getNomeCompleto() { return nomeCompleto; } 
-
-    public void setNomeCompleto(String nomeCompleto) { this.nomeCompleto = nomeCompleto; } 
-
-    public String getEmail() { return email; } 
-
-    public void setEmail(String email) { this.email = email; } 
-
-    public String getSenhaHash() { return senhaHash; } 
-
-    public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; } 
-
-    public LocalDate getDataNascimento() { return dataNascimento; } 
-
-    public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; } 
-
-    public BigDecimal getPesoInicial() { return pesoInicial; } 
-
-    public void setPesoInicial(BigDecimal pesoInicial) { this.pesoInicial = pesoInicial; } 
-
-    public BigDecimal getPesoAtual() { return pesoAtual; } 
-
-    public void setPesoAtual(BigDecimal pesoAtual) { this.pesoAtual = pesoAtual; } 
-
-    public BigDecimal getPesoMeta() { return pesoMeta; } 
-
-    public void setPesoMeta(BigDecimal pesoMeta) { this.pesoMeta = pesoMeta; } 
-
-    public BigDecimal getAltura() { return altura; } 
-
-    public void setAltura(BigDecimal altura) { this.altura = altura; } 
-
-    public String getObjetivoSaude() { return objetivoSaude; } 
-
-    public void setObjetivoSaude(String objetivoSaude) { this.objetivoSaude = objetivoSaude; } 
-
-    public String getTipoDieta() { return tipoDieta; } 
-
-    public void setTipoDieta(String tipoDieta) { this.tipoDieta = tipoDieta; } 
-
-    public String getRestricoesReligiosas() { return restricoesReligiosas; } 
-
-    public void setRestricoesReligiosas(String restricoesReligiosas) { this.restricoesReligiosas = restricoesReligiosas; } 
-
-    public String getAlergias() { return alergias; } 
-
-    public void setAlergias(String alergias) { this.alergias = alergias; } 
-
-    public String getRotinaAtividade() { return rotinaAtividade; } 
-
-    public void setRotinaAtividade(String rotinaAtividade) { this.rotinaAtividade = rotinaAtividade; } 
-
-    public Genero getGenero() { return genero; } 
-
-    public void setGenero(Genero genero) { this.genero = genero; } 
-
-    public String getStatus() { return status; } 
-
-    public void setStatus(String status) { this.status = status; } 
-
-    public LocalDateTime getCreatedAt() { return createdAt; } 
-
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; } 
-
-    public List<Evolucao> getEvolucoes() { return evolucoes; } 
-
-    public void setEvolucoes(List<Evolucao> evolucoes) { this.evolucoes = evolucoes; } 
-
-    public List<VinculoNutriPaciente> getVinculos() { return vinculos; } 
-
-    public void setVinculos(List<VinculoNutriPaciente> vinculos) { this.vinculos = vinculos; } 
-
-    public List<SolicitacoesDeContratacao> getSolicitacoes() { return solicitacoes; } 
-
-    public void setSolicitacoes(List<SolicitacoesDeContratacao> solicitacoes) { this.solicitacoes = solicitacoes; } 
-
-    public List<PlanoAlimentar> getPlanos() { return planos; } 
-
-    public void setPlanos(List<PlanoAlimentar> planos) { this.planos = planos; } 
-
+    public List<PlanoAlimentar> getPlanos() { return planos; }
+    public void setPlanos(List<PlanoAlimentar> planos) { this.planos = planos; }
 }
